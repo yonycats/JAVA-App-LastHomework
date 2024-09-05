@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="member">
+
+<!-- 
+	이 영역에 SQL문에 맞는 태그를 사용하여 SQL문을 기술한다.
+	
+	사용할 수 있는 기본적인 태그들
+	
+	<select> ~~~ </select>
+	<insert> ~~~ </insert>
+	<update> ~~~ </update>
+	<delete> ~~~ </delete>
+
+	위 태그에서 사용되는 주요 속성들
+	
+	1) id (필수값) : 해당 SQL문을 호출할 때 namespace값과 열결하여 사용하는 ID값
+	
+	2) parameterType : SQL문에 사용될 데이터를 담은 객체 타입을 지정한다. => 생략 가능
+					   (보통 VO클래스, 자바의 기본타입명 등이 사용된다.)
+	
+	3) resultType : select문을 실행한 결과를 담기 위한 객체 타입을 지정한다. select일 때만 사용.
+					   (보통 VO클래스, 자바의 기본타입명 등이 사용된다.)
+	
+	4) resultMap : 결과 레코드 컬럼명과 VO 객체의 속성명이 다를 경우에 적절한 매핑 작업을 위해 사용한다.
+	
+ -->
+
+	<select id="memberList" resultMap="memberMap">
+		
+		SELECT * FROM MYMEMBER
+	
+	</select>
+	
+	<select id="checkMember" resultType="String">
+		
+		SELECT * FROM MYMEMBER WHERE MEM_ID = #{id}
+	
+	</select>
+	
+	<select id="detailMember" resultType="String" resultMap="memberMap">
+		
+		SELECT * FROM MYMEMBER WHERE MEM_ID = #{id}
+	
+	</select>
+
+	<resultMap type="vo.MemberVO" id="memberMap">
+	
+		<!-- result: 일반적인 컬럼의 의미, id : 키 값이라는 의미 -->
+		<id property="memId" column="MEM_ID"/>
+		<result property="memPass" column="MEM_PASS"/>
+		<result property="memName" column="MEM_NAME"/>
+		<result property="memTel" column="MEM_TEL"/>
+		<result property="memAddr" column="MEM_ADDR"/>
+		<result property="memPhoto" column="MEM_PHOTO"/>
+	
+	</resultMap>
+
+	<insert id="insertMember" parameterType="vo.MemberVO">
+	
+		INSERT INTO MYMEMBER(MEM_ID, MEM_PASS, MEM_NAME, MEM_TEL, MEM_ADDR, MEM_PHOTO)
+		VALUES (#{memId}, #{memPass}, #{memName}, #{memTel}, #{memAddr}, #{memPhoto})
+	
+	</insert>
+	
+	<update id="updateMember" parameterType="vo.MemberVO">
+	
+		UPDATE MYMEMBER
+		SET MEM_PASS = #{memPass}, MEM_NAME = #{memName}, MEM_TEL = #{memTel}, MEM_ADDR = #{memAddr}, MEM_PHOTO = #{memPhoto}
+		WHERE MEM_ID = #{memId}
+	
+	</update>
+	
+	<delete id="deleteMember" parameterType="vo.MemberVO">
+	
+		DELETE FROM MYMEMBER
+		WHERE MEM_ID = #{memId}
+	
+	</delete>
+
+</mapper>
